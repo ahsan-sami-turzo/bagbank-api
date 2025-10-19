@@ -28,6 +28,7 @@ class Supplier(Base):
     
     # Relationships
     products = relationship("Product", back_populates="supplier")
+    purchases = relationship("Purchase", back_populates="supplier")
 
     def __repr__(self):
         return f"<Supplier(id={self.id}, name='{self.name}', type='{self.supplier_type}')>"

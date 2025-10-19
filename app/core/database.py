@@ -33,6 +33,10 @@ async def init_db():
     from app.models import product_attributes  # noqa
     from app.models import supplier  # noqa
     from app.models import product  # noqa
+    from app.models import purchase  # noqa
+    from app.models import return_workflow  # noqa
+    from app.models import sales  # noqa
+    from app.models import stock  # noqa
     
     # Create all tables
     Base.metadata.create_all(bind=engine)

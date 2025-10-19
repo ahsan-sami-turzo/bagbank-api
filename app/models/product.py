@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.core.database import Base
 import enum
+import uuid
 
 
 class OwnershipStatus(str, enum.Enum):
@@ -65,7 +66,11 @@ class ProductVariation(Base):
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     color_id = Column(Integer, ForeignKey("product_colors.id"), nullable=False)
     sku = Column(String(50), unique=True, index=True, nullable=False)
-    stock_quantity = Column(Integer, default=0)
+    barcode = Column(String(50), nullable=True)  # EAN/UPC code
+    selling_price = Column(Numeric(10, 2), nullable=False)
+    purchase_price = Column(Numeric(10, 2), nullable=True)  # Default cost
+    initial_stock = Column(Integer, default=0)
+    current_stock = Column(Integer, default=0)  # Computed and cached
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -73,6 +78,11 @@ class ProductVariation(Base):
     # Relationships
     product = relationship("Product", back_populates="variations")
     color = relationship("ProductColor", back_populates="variations")
+    purchase_details = relationship("PurchaseDetail", back_populates="product_variation")
+    purchase_returns = relationship("PurchaseReturn", back_populates="product_variation")
+    sales_details = relationship("SalesDetail", back_populates="product_variation")
+    stock_ledger_entries = relationship("StockLedger", back_populates="product_variation")
+    inventory_counts = relationship("InventoryCount", back_populates="product_variation")
 
     def __repr__(self):
         return f"<ProductVariation(id={self.id}, sku='{self.sku}', product_id={self.product_id})>"
