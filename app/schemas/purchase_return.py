@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 from decimal import Decimal
-from app.models.return import RefundStatus
+from app.models.return_workflow import RefundStatus
 
 
 class PurchaseReturnBase(BaseModel):
